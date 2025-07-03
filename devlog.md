@@ -7,7 +7,7 @@
     -   [ ] Create a tRPC `adminProcedure` to protect admin routes, hardcoded to my GitHub user ID (use Better Auth API).
     -   [ ] Create a tRPC `userProcedure` to protect routes requiring any logged-in user (e.g., commenting or locked posts).
 
--   [ ] **Database Schemas (Prisma/Drizzle)**
+-   [ ] **Database Schemas (Drizzle)**
     -   [ ] Define `Resume` schema (for experience, education, etc.).
     -   [ ] Define `Portfolio` schema (for projects).
     -   [ ] Define `Blog` schema (for posts).
