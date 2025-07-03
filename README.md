@@ -1,5 +1,5 @@
-## Fable
+# Fable
 
-# WORK IN PROGRESS
+## WORK IN PROGRESS
 
-# Personnel Resume, Portfolio, and Blog Site with a custom Admin CMS
+## Personnel Resume, Portfolio, and Blog Site with a custom Admin CMS
