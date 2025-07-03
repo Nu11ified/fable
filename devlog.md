@@ -2,10 +2,10 @@
 
 ## Phase 1: Backend & Authentication
 
--   [ ] **Authentication**
-    -   [ ] Implement Better-Auth with the GitHub OAuth provider.
-    -   [ ] Create a tRPC `adminProcedure` to protect admin routes, hardcoded to my GitHub user ID (use Better Auth API).
-    -   [ ] Create a tRPC `userProcedure` to protect routes requiring any logged-in user (e.g., commenting or locked posts).
+-   [X] **Authentication**
+    -   [X] Implement Better-Auth with the GitHub OAuth provider.
+    -   [X] Create a tRPC `adminProcedure` to protect admin routes, hardcoded to my GitHub user ID (use Better Auth API).
+    -   [X] Create a tRPC `userProcedure` to protect routes requiring any logged-in user (e.g., commenting or locked posts).
 
 -   [ ] **Database Schemas (Drizzle)**
     -   [ ] Define `Resume` schema (for experience, education, etc.).
@@ -16,8 +16,8 @@
 -   [ ] **API Routes (tRPC)**
     -   [ ] **Admin Routes:**
         -   [ ] `resume.add`, `resume.update`, `resume.delete`
-        -   [ ] `portfolio.add`, `portfolio.update`, `portfolio.delete`
-        -   [ ] `blog.add`, `blog.update`, `blog.delete`, `blog.lock`, `blog.unlock`
+        -   [ ] `portfolio.add`, `portfolio.update`, `portfolio.delete`, `star.portfolio.add`, `star.portfolio.delete` 
+        -   [ ] `blog.add`, `blog.update`, `blog.delete`, `lock.blog.add`, `lock.blog.delete`, , `star.portfolio.add`, `star.portfolio.delete` 
         -   [ ] `users.ban`, `user.unban`
          -  [ ] `comments.delete`, `star.comment.add`, `star.comment.delete`
     -   [ ] **Public Routes:**
