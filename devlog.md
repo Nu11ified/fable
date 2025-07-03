@@ -7,26 +7,26 @@
     -   [X] Create a tRPC `adminProcedure` to protect admin routes, hardcoded to my GitHub user ID (use Better Auth API).
     -   [X] Create a tRPC `userProcedure` to protect routes requiring any logged-in user (e.g., commenting or locked posts).
 
--   [ ] **Database Schemas (Drizzle)**
-    -   [ ] Define `Resume` schema (for experience, education, etc.).
-    -   [ ] Define `Portfolio` schema (for projects).
-    -   [ ] Define `Blog` schema (for posts).
-    -   [ ] Define `Comment` and `User` schemas.
+-   [X] **Database Schemas (Drizzle)**
+    -   [X] Define `Resume` schema (for experience, education, etc.).
+    -   [X] Define `Portfolio` schema (for projects).
+    -   [X] Define `Blog` schema (for posts).
+    -   [X] Define `Comment` and `User` schemas.
 
--   [ ] **API Routes (tRPC)**
-    -   [ ] **Admin Routes:**
-        -   [ ] `resume.add`, `resume.update`, `resume.delete`
-        -   [ ] `portfolio.add`, `portfolio.update`, `portfolio.delete`, `star.portfolio.add`, `star.portfolio.delete` 
-        -   [ ] `blog.add`, `blog.update`, `blog.delete`, `lock.blog.add`, `lock.blog.delete`, , `star.portfolio.add`, `star.portfolio.delete` 
-        -   [ ] `users.ban`, `user.unban`
-         -  [ ] `comments.delete`, `star.comment.add`, `star.comment.delete`
-    -   [ ] **Public Routes:**
-        -   [ ] `resume.get`
-        -   [ ] `portfolio.getAll`, `portfolio.getById`
-        -   [ ] `blog.getAll`, `blog.getById`
-    -   [ ] **User Routes:**
-        -   [ ] `blog.addComment`
-        -   [ ] `blog.viewLockedPost`
+-   [X] **API Routes (tRPC)**
+    -   [X] **Admin Routes:**
+        -   [X] `resume.add`, `resume.update`, `resume.delete`
+        -   [X] `portfolio.add`, `portfolio.update`, `portfolio.delete`, `star.portfolio.add`, `star.portfolio.delete` 
+        -   [X] `blog.add`, `blog.update`, `blog.delete`, `lock.blog.add`, `lock.blog.delete`, , `star.blog.add`, `star.blog.delete` 
+        -   [X] `users.ban`, `user.unban`
+         -  [X] `comments.delete`, `star.comment.add`, `star.comment.delete`
+    -   [X] **Public Routes:**
+        -   [X] `resume.get`
+        -   [X] `portfolio.getAll`, `portfolio.getById`
+        -   [X] `blog.getAll`, `blog.getById`
+    -   [X] **User Routes:**
+        -   [X] `blog.addComment`
+        -   [X] `blog.viewLockedPost`
 
 ## Phase 2: Frontend UI & Design
 
