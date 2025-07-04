@@ -5,6 +5,18 @@ import { blogPosts } from "@/server/db/schemas/blog";
 import { eq } from "drizzle-orm";
 
 export const blogAdminRouter = createTRPCRouter({
+  getAll: adminProcedure.query(({ ctx }) => {
+    return ctx.db.query.blogPosts.findMany();
+  }),
+
+  getById: adminProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.blogPosts.findFirst({
+        where: eq(blogPosts.id, input.id),
+      });
+    }),
+
   add: adminProcedure
     .input(
       z.object({
@@ -16,7 +28,7 @@ export const blogAdminRouter = createTRPCRouter({
       if (!ctx.session.user) {
         throw new Error("User not authenticated");
       }
-      await db.insert(blogPosts).values({
+      await ctx.db.insert(blogPosts).values({
         title: input.title,
         content: input.content,
         authorId: ctx.session.user.id,

@@ -10,15 +10,15 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import type { Session, User } from "better-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { eq } from "drizzle-orm";
 
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
+import { user } from "@/server/db/schemas/auth";
 import { env } from "@/env";
 
 interface CustomSession extends Session {
-  user?: User & {
-    githubId?: string;
-  };
+  user?: User;
 }
 
 /**
@@ -126,8 +126,13 @@ export const publicProcedure = t.procedure;
  *
  * @see https://trpc.io/docs/procedures
  */
-export const userProcedure = t.procedure.use((opts) => {
+export const userProcedure = t.procedure.use(async (opts) => {
   if (!opts.ctx.session?.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  //check if the user is banned
+  const userRecord = await opts.ctx.db.select().from(user).where(eq(user.id, opts.ctx.session.user.id));
+  if (userRecord[0]?.isBanned) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return opts.next({
@@ -139,7 +144,7 @@ export const userProcedure = t.procedure.use((opts) => {
 });
 
 export const adminProcedure = userProcedure.use((opts) => {
-  if (opts.ctx.session?.user?.githubId !== env.GITHUB_USER_ID) {
+  if (opts.ctx.session?.user?.email !== env.GITHUB_USER_EMAIL) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 

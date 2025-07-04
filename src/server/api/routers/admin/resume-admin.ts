@@ -189,6 +189,15 @@ const personalInfoRouter = createTRPCRouter({
 });
 
 export const resumeAdminRouter = createTRPCRouter({
+  getAll: adminProcedure.query(async ({ ctx }) => {
+    return {
+      experience: await ctx.db.query.experience.findMany(),
+      education: await ctx.db.query.education.findMany(),
+      skills: await ctx.db.query.skills.findMany(),
+      interests: await ctx.db.query.interests.findMany(),
+      personalInfo: await ctx.db.query.personalInfo.findMany(),
+    };
+  }),
   experience: experienceRouter,
   education: educationRouter,
   skills: skillsRouter,

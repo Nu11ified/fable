@@ -5,6 +5,10 @@ import { portfolioProjects } from "@/server/db/schemas/portfolio";
 import { eq } from "drizzle-orm";
 
 export const portfolioAdminRouter = createTRPCRouter({
+  getAll: adminProcedure.query(({ ctx }) => {
+    return ctx.db.query.portfolioProjects.findMany();
+  }),
+
   add: adminProcedure
     .input(
       z.object({

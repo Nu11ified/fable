@@ -5,7 +5,6 @@ import { sql } from "drizzle-orm";
 import {
   index,
   integer,
-  primaryKey,
   sqliteTableCreator,
   text,
 } from "drizzle-orm/sqlite-core";

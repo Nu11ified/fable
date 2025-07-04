@@ -20,6 +20,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@blocknote/code-block": "^0.33.0",
+    "@blocknote/core": "^0.33.0",
+    "@blocknote/react": "^0.33.0",
+    "@blocknote/shadcn": "^0.33.0",
     "@hookform/resolvers": "^5.1.1",
     "@libsql/client": "^0.14.0",
     "@orpc/trpc": "^1.6.4",
@@ -65,6 +69,7 @@
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.525.0",
+    "motion": "^12.23.0",
     "next": "^15.2.3",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",

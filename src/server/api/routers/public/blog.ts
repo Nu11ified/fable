@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
 import { blogPosts } from "@/server/db/schemas/blog";
-import { eq, and, isNull } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 export const blogPublicRouter = createTRPCRouter({
   getAll: publicProcedure.query(async () => {

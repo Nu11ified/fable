@@ -30,11 +30,12 @@
 
 ## Phase 2: Frontend UI & Design
 
--   [ ] **Setup & Theming**
-    -   [ ] Install and configure `shadcn/ui`.
-    -   [ ] Implement the core theme and light/dark mode toggle.
+-   [X] **Setup & Theming**
+    -   [X] Install and configure `shadcn/ui`.
+    -   [X] Implement light/dark mode toggle.
+    -   [X] Implement the core theme.
 
--   [ ] **Design System & Style Guide**
+-   **Design System & Style Guide**
     <details>
       <summary>Click to expand Style Guide</summary>
     
@@ -46,17 +47,37 @@
 ## Phase 3: Page & Component Implementation
 
 -   [ ] **Admin Panel**
-    -   [ ] Build Resume management interface.
-    -   [ ] Build Portfolio management interface.
-    -   [ ] Build Blog management interface.
-    -   [ ] Build Comment & User management interface.
-
+    -   [X] Build Resume management interface.
+    -   [X] Build Portfolio management interface.
+        -   [X] GitHub-based image storage system with automatic repository creation
+        -   [X] Photo uploader component with drag-and-drop functionality
+    -   [X] **Photo Upload Manager** (Dedicated upload area at `/admin/upload`)
+        -   [X] Enhanced photo uploader with drag-and-drop functionality
+        -   [X] Upload history and management interface
+        -   [X] GitHub integration status monitoring
+        -   [X] URL copying and image preview features
+    -   [X] Build Blog management interface.
+        -   [X] Create a proper Blocknote component that will be used for rich text editor that will translate into a json that will be stored in the database 
+        -   [X] Have the photo upload intergration + image url + rich text compatbility 
+    -   [X] User management interface.
+    -   [X] Comment management interface.
+ 
 -   [ ] **Public-Facing Pages**
+    -   [ ] **Home Page**
+        -   [ ] Create main page layout.
+        -   [ ] Home page with the name, city/country, etc.
+        -   [ ] Starred list of projects
+        -   [ ] 
+        -   [ ] All of the skills 
+        -   [ ] Total Github stats such as languages used, commits, etc.
     -   [ ] **Resume Page**
         -   [ ] Create main page layout.
+        -   [ ] Home page with the name, city/country, etc.
+        -   [ ] Starred list of projects
         -   [ ] Build `Experience` section component.
         -   [ ] Build `Education` section component.
         -   [ ] Build `Skills` section component.
+        -   [ ] Build `Interests` section component. 
     -   [ ] **Portfolio Page**
         -   [ ] Build portfolio list view with project cards.
         -   [ ] Build detailed project view page.
@@ -64,3 +85,9 @@
         -   [ ] Build blog list view with post cards.
         -   [ ] Build individual blog post page.
         -   [ ] Implement comment section with sorting logic.
+
+-   [ ] **Miscelenous Features**
+    -   [ ] **Admin Features**
+        -   [ ] In the public sided area the admin should be able to star/delete comments and ban users if they hover over the users name and comment
+        -   [ ] All comments should have their github username and github profile picture along with it
+        -   [ ] For all posts at the top have my name and the admin's profile picture via their github profile picture

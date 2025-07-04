@@ -1,5 +1,6 @@
 import { blogAdminRouter } from "./routers/admin/blog-admin";
 import { commentsAdminRouter } from "./routers/admin/comments-admin";
+import { githubStorageRouter } from "./routers/admin/github-storage";
 import { portfolioAdminRouter } from "./routers/admin/portfolio-admin";
 import { resumeAdminRouter } from "./routers/admin/resume-admin";
 import { userAdminRouter } from "./routers/admin/user-admin";
@@ -19,6 +20,7 @@ export const appRouter = createTRPCRouter({
   admin: createTRPCRouter({
     blog: blogAdminRouter,
     comments: commentsAdminRouter,
+    githubStorage: githubStorageRouter,
     portfolio: portfolioAdminRouter,
     resume: resumeAdminRouter,
     user: userAdminRouter,
