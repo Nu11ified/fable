@@ -9,6 +9,8 @@ const config = {
   reactStrictMode: false, // Disabled for BlockNote compatibility
 
   images: {
+    loader: "custom",
+    loaderFile: "src/lib/image-loader.ts",
     remotePatterns: [
       {
         protocol: 'https',
