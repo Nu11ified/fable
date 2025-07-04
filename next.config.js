@@ -7,6 +7,7 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: false, // Disabled for BlockNote compatibility
+
   images: {
     remotePatterns: [
       {
@@ -35,6 +36,7 @@ const config = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  serverExternalPackages: ["@libsql/isomorphic-ws"]
 };
 
 export default config;
