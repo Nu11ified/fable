@@ -14,6 +14,8 @@ import {
   Briefcase,
   Linkedin
 } from "lucide-react";
+import * as SiIcons from 'react-icons/si';
+import type { ElementType } from 'react';
 import { format, differenceInYears } from "date-fns";
 import { SparklesText } from "@/components/magicui/sparkles-text";
 import { MagicCard } from "@/components/magicui/magic-card";
@@ -40,6 +42,15 @@ const IconMap: Record<string, React.ElementType> = {
   CSS3: Code,
   JavaScript: Code,
   Default: Code,
+};
+
+// Type the imported icons map
+const SiIconsMap = SiIcons as Record<string, ElementType>;
+
+// Helper to get skill icon from react-icons/si
+const getSkillIcon = (skillName: string) => {
+  const key = 'Si' + skillName.replace(/[^a-zA-Z0-9]/g, '');
+  return (SiIconsMap[key] ?? IconMap[skillName] ?? IconMap.Default)!;
 };
 
 export function HomeContent() {
@@ -85,8 +96,6 @@ export function HomeContent() {
   const starredProjects = portfolioProjects?.filter(p => p.isStarred).slice(0, 2) ?? [];
   const starredBlogPosts = blogPosts?.filter(p => p.isStarred).slice(0, 3) ?? [];
 
-  const allSkills = Object.values(skillsByCategory).flat().slice(0, 8);
-
   const getGithubProfilePicture = (githubUrl: string | null | undefined) => {
     if (!githubUrl) return null;
     const username = githubUrl.split('/').pop();
@@ -130,16 +139,23 @@ export function HomeContent() {
                   {personalInfo?.summary ?? "I'm a creative software developer with experience in building modern web applications. I specialize in UI design and crafting engaging user experiences with great attention to detail."}
                 </p>
 
-                <div className="grid grid-cols-4 gap-3 mb-6">
-                  {allSkills.map((skill) => {
-                    const Icon = IconMap[skill.name] ?? IconMap.Default;
-                    return (
-                      <div key={skill.id} className="flex flex-col items-center p-3 bg-secondary rounded-lg hover:bg-accent transition-colors">
-                        {Icon && <Icon className="w-6 h-6 mb-2 text-muted-foreground" />}
-                        <span className="text-xs text-muted-foreground">{skill.name}</span>
+                <div className="mb-6">
+                  {Object.entries(skillsByCategory).map(([category, skills]) => (
+                    <div key={category} className="mb-4">
+                      <h3 className="text-lg font-semibold mb-2">{category}</h3>
+                      <div className="grid grid-cols-4 md:grid-cols-6 gap-3">
+                        {skills.map((skill) => {
+                          const Icon = getSkillIcon(skill.name);
+                          return (
+                            <div key={skill.id} className="flex flex-col items-center p-3 bg-secondary rounded-lg hover:bg-accent transition-colors">
+                              {Icon && <Icon className="w-6 h-6 mb-2 text-muted-foreground" />}
+                              <span className="text-xs text-muted-foreground">{skill.name}</span>
+                            </div>
+                          );
+                        })}
                       </div>
-                    )
-                  })}
+                    </div>
+                  ))}
                 </div>
 
                 <div className="flex gap-4">
@@ -416,6 +432,14 @@ export function HomeContent() {
                 <div className="text-sm text-muted-foreground">Total Forks</div>
                 <div className="text-2xl font-bold">{githubStats.totalForks}</div>
               </div>
+              <div className="text-center">
+                <div className="text-sm text-muted-foreground">Commits</div>
+                <div className="text-2xl font-bold">{githubStats.commitCount}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm text-muted-foreground">Pull Requests</div>
+                <div className="text-2xl font-bold">{githubStats.pullRequestCount}</div>
+              </div>
             </div>
             {Object.keys(githubStats.topLanguages).length > 0 && (
               <div className="mt-4 text-center">
@@ -424,6 +448,26 @@ export function HomeContent() {
                   {Object.entries(githubStats.topLanguages).map(([lang, count]) => (
                     <Badge key={lang} variant="secondary">{`${lang} (${count})`}</Badge>
                   ))}
+                </div>
+              </div>
+            )}
+            {githubStats.commitGraph && githubStats.commitGraph.length > 0 && (
+              <div className="mt-6">
+                <div className="text-sm text-muted-foreground text-center mb-2">
+                  Commit Activity (Last {githubStats.commitGraph.length} weeks)
+                </div>
+                <div className="flex items-end justify-center gap-1">
+                  {(() => {
+                    const max = Math.max(...githubStats.commitGraph.map((d) => d.total));
+                    return githubStats.commitGraph.map((week, idx) => (
+                      <div
+                        key={idx}
+                        className="bg-primary rounded-sm"
+                        style={{ width: '4px', height: `${(week.total / max) * 50 + 2}px` }}
+                        title={`${new Date(week.week * 1000).toLocaleDateString()}: ${week.total}`}
+                      />
+                    ));
+                  })()}
                 </div>
               </div>
             )}

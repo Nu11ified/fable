@@ -116,6 +116,67 @@ export const githubStatsPublicRouter = createTRPCRouter({
           return acc;
         }, {} as Record<string, number>);
 
+      // Fetch commit count for user using GitHub Search API
+      const commitSearchResponse = await fetch(
+        `https://api.github.com/search/commits?q=author:${username}&per_page=1`,
+        {
+          headers: {
+            'Accept': 'application/vnd.github.cloak-preview+json',
+            'User-Agent': 'Portfolio-Website',
+          },
+        }
+      );
+      if (!commitSearchResponse.ok) {
+        throw new Error(`GitHub API error: ${commitSearchResponse.status}`);
+      }
+      const commitSearchData = await commitSearchResponse.json() as { total_count: number };
+      const totalCommits = commitSearchData.total_count;
+
+      // Fetch pull request count for user using GitHub Search API
+      const prSearchResponse = await fetch(
+        `https://api.github.com/search/issues?q=type:pr+author:${username}&per_page=1`,
+        {
+          headers: {
+            'Accept': 'application/vnd.github.v3+json',
+            'User-Agent': 'Portfolio-Website',
+          },
+        }
+      );
+      if (!prSearchResponse.ok) {
+        throw new Error(`GitHub API error: ${prSearchResponse.status}`);
+      }
+      const prSearchData = await prSearchResponse.json() as { total_count: number };
+      const totalPullRequests = prSearchData.total_count;
+
+      // Fetch commit activity graph aggregated across all repos
+      let commitGraph: Array<{ week: number; total: number }> = [];
+      try {
+        const activityPromises = reposData.map((repo) =>
+          fetch(`https://api.github.com/repos/${username}/${repo.name}/stats/commit_activity`, {
+            headers: {
+              'Accept': 'application/vnd.github.v3+json',
+              'User-Agent': 'Portfolio-Website',
+            },
+          }).then((res) => {
+            if (!res.ok) {
+              throw new Error(`GitHub commit activity error for ${repo.name}: ${res.status}`);
+            }
+            return res.json() as Promise<Array<{ week: number; total: number; days: number[] }>>;
+          })
+        );
+        const activities = await Promise.all(activityPromises);
+        const aggregated: { week: number; total: number }[] = [];
+        activities.filter(Array.isArray).forEach((repoActivity) => {
+          repoActivity.forEach((weekData: { week: number; total: number }, idx: number) => {
+            aggregated[idx] ??= { week: weekData.week, total: 0 };
+            aggregated[idx].total += weekData.total;
+          });
+        });
+        commitGraph = aggregated;
+      } catch (err) {
+        console.error('Error fetching commit graph:', err);
+      }
+
       return {
         username,
         name: userData.name ?? username,
@@ -131,6 +192,9 @@ export const githubStatsPublicRouter = createTRPCRouter({
         totalStars,
         totalForks,
         topLanguages,
+        commitCount: totalCommits,
+        pullRequestCount: totalPullRequests,
+        commitGraph,
       };
     } catch (error) {
       console.error('Error fetching GitHub stats:', error);
@@ -151,6 +215,9 @@ export const githubStatsPublicRouter = createTRPCRouter({
         totalStars: 0,
         totalForks: 0,
         topLanguages: {},
+        commitCount: 0,
+        pullRequestCount: 0,
+        commitGraph: [],
       };
     }
   }),
