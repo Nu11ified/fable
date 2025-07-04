@@ -25,14 +25,14 @@ Fable is a modern personal website that includes a resume, portfolio, blog, and 
 ## Architecture
 ```mermaid
 graph LR
-  Browser[Browser] -->|HTTP| Frontend[Next.js Frontend]
-  Frontend -->|TRPC| APIServer[TRPC API Server]
-  APIServer -->|ORM| DB[Turso DB via Drizzle ORM]
-  APIServer -->|REST| GH[GitHub REST API]
-  APIServer -->|Search| GHSearch[GitHub Search API]
-  APIServer -->|OAuth| Auth[GitHub OAuth]
-  Frontend --> UI[UI Components (MagicUI, Lucide, React Icons)]
-  APIServer -->|Env| Env[Environment Variables (Zod)]
+  Browser["Browser"] -->|HTTP| Frontend["Next.js Frontend"]
+  Frontend -->|TRPC| APIServer["TRPC API Server"]
+  APIServer -->|ORM| DB["Turso DB via Drizzle ORM"]
+  APIServer -->|REST| GH["GitHub REST API"]
+  APIServer -->|Search| GHSearch["GitHub Search API"]
+  APIServer -->|OAuth| Auth["GitHub OAuth"]
+  Frontend --> UI["UI Components<br/>(MagicUI, Lucide, React Icons)"]
+  APIServer -->|Env| Env["Environment Variables<br/>(Zod)"]
 ```
 
 ## Getting Started
