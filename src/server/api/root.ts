@@ -1,14 +1,17 @@
 import { blogAdminRouter } from "./routers/admin/blog-admin";
 import { commentsAdminRouter } from "./routers/admin/comments-admin";
 import { githubStorageRouter } from "./routers/admin/github-storage";
+import { homepageAdminRouter } from "./routers/admin/homepage-admin";
 import { portfolioAdminRouter } from "./routers/admin/portfolio-admin";
 import { resumeAdminRouter } from "./routers/admin/resume-admin";
 import { userAdminRouter } from "./routers/admin/user-admin";
 import { commentMemberRouter } from "./routers/member/comment";
 import { lockedBlogMemberRouter } from "./routers/member/locked-blog";
 import { blogPublicRouter } from "./routers/public/blog";
+import { githubStatsPublicRouter } from "./routers/public/github-stats";
+import { homePublicRouter } from "./routers/public/home";
 import { portfolioPublicRouter } from "./routers/public/portfolio";
-import { resumePublicRouter } from "./routers/public/resume";
+import { resumeRouter } from "./routers/public/resume";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 /**
@@ -21,6 +24,7 @@ export const appRouter = createTRPCRouter({
     blog: blogAdminRouter,
     comments: commentsAdminRouter,
     githubStorage: githubStorageRouter,
+    homepage: homepageAdminRouter,
     portfolio: portfolioAdminRouter,
     resume: resumeAdminRouter,
     user: userAdminRouter,
@@ -31,8 +35,10 @@ export const appRouter = createTRPCRouter({
   }),
   public: createTRPCRouter({
     blog: blogPublicRouter,
+    githubStats: githubStatsPublicRouter,
+    home: homePublicRouter,
     portfolio: portfolioPublicRouter,
-    resume: resumePublicRouter,
+    resume: resumeRouter,
   }),
 });
 

@@ -76,17 +76,19 @@ export function BlockNoteEditor({
 
   return (
     <div className="w-full">
-      <div className="mb-4 flex gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowImageDialog(true)}
-          className="flex items-center gap-2"
-        >
-          <ImageIcon className="h-4 w-4" />
-          Insert Image
-        </Button>
-      </div>
+      {editable && (
+        <div className="mb-4 flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowImageDialog(true)}
+            className="flex items-center gap-2"
+          >
+            <ImageIcon className="h-4 w-4" />
+            Insert Image
+          </Button>
+        </div>
+      )}
 
       <BlockNoteView
         editor={editor}
@@ -101,7 +103,7 @@ export function BlockNoteEditor({
       />
 
       {/* Image Insert Dialog */}
-      {showImageDialog && (
+      {editable && showImageDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <CardHeader>

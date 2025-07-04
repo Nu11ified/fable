@@ -67,7 +67,7 @@
         -   [ ] Create main page layout.
         -   [ ] Home page with the name, city/country, etc.
         -   [ ] Starred list of projects
-        -   [ ] 
+        -   [ ] Starred list of blog posts
         -   [ ] All of the skills 
         -   [ ] Total Github stats such as languages used, commits, etc.
     -   [ ] **Resume Page**

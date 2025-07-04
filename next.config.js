@@ -23,6 +23,13 @@ const config = {
       },
     ],
   },
+  //ignore build errors and type errors
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default config;

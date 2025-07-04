@@ -18,6 +18,7 @@ import {
   Home,
   MessageSquare,
   Package,
+  Settings,
   Upload,
   Users,
 } from "lucide-react";
@@ -69,6 +70,14 @@ export default async function AdminLayout({
                   <Link href="/admin">
                     <Home className="h-4 w-4" />
                     <span>Dashboard</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/admin/homepage">
+                    <Settings className="h-4 w-4" />
+                    <span>Homepage</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -136,6 +145,13 @@ export default async function AdminLayout({
                 </span>
               </div>
             </div>
+            <Link
+              href="/"
+              className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
+            >
+              <Home className="h-4 w-4" />
+              <span>Back to Home</span>
+            </Link>
             <SignOutButton />
           </SidebarFooter>
         </Sidebar>

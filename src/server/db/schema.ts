@@ -3,3 +3,4 @@ export * from "./schemas/blog";
 export * from "./schemas/comment";
 export * from "./schemas/portfolio";
 export * from "./schemas/resume";
+export * from "./schemas/homepage";
