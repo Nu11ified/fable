@@ -3,6 +3,13 @@
 ## Project Overview
 Fable is a modern personal website that includes a resume, portfolio, blog, and custom admin CMS, built with Next.js, TRPC, and Drizzle ORM on Turso.
 
+## Screenshots
+![Homepage Screenshot](assets/headpage.png)
+*Homepage of the Fable website showcasing the modern design and layout.*
+
+![Admin CMS Screenshot](assets/adminpage.png)
+*Custom admin CMS for managing website content efficiently.*
+
 ## Features
 - Dynamic resume with timeline
 - Portfolio showcase with starred projects
