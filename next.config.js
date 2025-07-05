@@ -38,7 +38,7 @@ const config = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
-  serverExternalPackages: ["@libsql/isomorphic-ws"]
+  //serverExternalPackages: ["@libsql/isomorphic-ws"]
 };
 
 export default config;
