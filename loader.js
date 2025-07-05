@@ -5,7 +5,7 @@ export default function myImageLoader({ src, width, quality }) {
     const isLocal = !src.startsWith('http');
     const query = new URLSearchParams();
 
-    const imageOptimizationApi = env.TRANSFORMATION_URL;
+    const imageOptimizationApi = env.NEXT_PUBLIC_TRANSFORMATION_URL;
     // Your NextJS application URL
     const baseUrl = env.NEXT_PUBLIC_BETTER_AUTH_URL;
 
