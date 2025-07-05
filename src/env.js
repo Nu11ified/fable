@@ -29,6 +29,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GITHUB_USER_EMAIL: z.string().min(1),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
     NEXT_PUBLIC_GEOCODE_MAPS_CO_API_KEY: z.string(),
+    NEXT_PUBLIC_BETTER_AUTH_URL: z.string().url(),
   },
 
   /**
@@ -47,6 +48,7 @@ export const env = createEnv({
     TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL,
     TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
     NEXT_PUBLIC_GEOCODE_MAPS_CO_API_KEY: process.env.NEXT_PUBLIC_GEOCODE_MAPS_CO_API_KEY,
+    NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
