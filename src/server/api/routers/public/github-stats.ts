@@ -52,7 +52,7 @@ function isGitHubRepoArray(data: unknown): data is GitHubRepo[] {
 export const githubStatsPublicRouter = createTRPCRouter({
   getStats: publicProcedure.query(async () => {
     try {
-      const username = env.GITHUB_USER_NAME as string;
+      const username = env.GITHUB_USER_NAME;
       
       if (!username) {
         throw new Error('GitHub username not configured');

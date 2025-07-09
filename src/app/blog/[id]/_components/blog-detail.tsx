@@ -8,6 +8,7 @@ import { User, Calendar, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DynamicBlockNoteEditor } from "@/components/ui/dynamic-blocknote-editor";
 import type { PartialBlock } from "@blocknote/core";
+import { BlogComments } from "./blog-comments";
 
 interface BlogDetailProps {
   id: number;
@@ -56,6 +57,11 @@ export default function BlogDetail({ id }: BlogDetailProps) {
 
         <div className="prose max-w-none">
           <DynamicBlockNoteEditor content={post.content as PartialBlock[]} editable={false} />
+        </div>
+
+        {/* Comments Section */}
+        <div className="border-t border-border mt-8 pt-8">
+          <BlogComments postId={id} />
         </div>
       </div>
     </div>

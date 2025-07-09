@@ -1,12 +1,12 @@
 import { api, HydrateClient } from "@/trpc/server";
 import BlogDetail from "./_components/blog-detail";
 
-interface BlogPostParams {
-  params: { id: string | Promise<string> };
-}
-
-export default async function BlogPostPage({ params }: BlogPostParams) {
-  const id = await params.id;
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const postId = Number(id);
   // Prefetch the individual blog post for client-side hydration
   await api.public.blog.getById.prefetch({ id: postId });

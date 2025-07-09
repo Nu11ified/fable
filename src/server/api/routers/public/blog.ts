@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
 import { blogPosts } from "@/server/db/schemas/blog";
+import { comments } from "@/server/db/schemas/comment";
 import { eq } from "drizzle-orm";
 
 export const blogPublicRouter = createTRPCRouter({
@@ -28,5 +29,16 @@ export const blogPublicRouter = createTRPCRouter({
       }
 
       return post;
+    }),
+  getComments: publicProcedure
+    .input(z.object({ postId: z.number() }))
+    .query(async ({ input }) => {
+      return await db.query.comments.findMany({
+        where: eq(comments.postId, input.postId),
+        with: {
+          author: true,
+        },
+        orderBy: (comments, { asc }) => [asc(comments.createdAt)],
+      });
     }),
 });

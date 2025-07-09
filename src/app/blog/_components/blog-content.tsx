@@ -139,46 +139,48 @@ export function BlogContent() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <Card className="bg-card border-border hover:border-primary transition-all duration-300 group">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                            <div className="flex items-center gap-1">
-                              <User className="h-4 w-4" />
-                              <span>{post.author.name}</span>
+                  <Link href={`/blog/${post.id}`}>
+                    <Card className="bg-card border-border hover:border-primary transition-all duration-300 group cursor-pointer">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                              <div className="flex items-center gap-1">
+                                <User className="h-4 w-4" />
+                                <span>{post.author.name}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Calendar className="h-4 w-4" />
+                                <span>{format(post.createdAt, "MMM d, yyyy")}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-4 w-4" />
+                                <span>5 min read</span>
+                              </div>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <Calendar className="h-4 w-4" />
-                              <span>{format(post.createdAt, "MMM d, yyyy")}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-4 w-4" />
-                              <span>5 min read</span>
+                            
+                            <h3 className="text-xl font-semibold mb-3 group-hover:text-blue-400 transition-colors">
+                              {post.title}
+                            </h3>
+                            
+                            <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                              {extractSnippet(post)}
+                            </p>
+                            
+                            <div className="flex items-center gap-2">
+                              <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-500">
+                                Featured
+                              </Badge>
                             </div>
                           </div>
-                          
-                          <h3 className="text-xl font-semibold mb-3 group-hover:text-blue-400 transition-colors">
-                            {post.title}
-                          </h3>
-                          
-                          <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                            {extractSnippet(post)}
-                          </p>
-                          
-                          <div className="flex items-center gap-2">
-                            <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-500">
-                              Featured
-                            </Badge>
+                          <div className="flex items-center gap-2 ml-4">
+                            <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                            <ExternalLink className="w-5 h-5 text-gray-400" />
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 ml-4">
-                          <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                          <ExternalLink className="w-5 h-5 text-gray-400" />
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </motion.div>
               ))}
             </div>
@@ -200,31 +202,33 @@ export function BlogContent() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: (starredPosts.length + index) * 0.1 }}
                 >
-                  <Card className="bg-card border-border hover:border-primary transition-all duration-300 group">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors">
-                            {post.title}
-                          </h3>
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                            <div className="flex items-center gap-1">
-                              <Calendar className="h-3" />
-                              <span>{format(post.createdAt, "MMM d, yyyy")}</span>
+                  <Link href={`/blog/${post.id}`}>
+                    <Card className="bg-card border-border hover:border-primary transition-all duration-300 group cursor-pointer">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors">
+                              {post.title}
+                            </h3>
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                              <div className="flex items-center gap-1">
+                                <Calendar className="h-3" />
+                                <span>{format(post.createdAt, "MMM d, yyyy")}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                <span>5 min read</span>
+                              </div>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              <span>5 min read</span>
-                            </div>
+                            <p className="text-muted-foreground text-sm mt-2 line-clamp-2">
+                              {extractSnippet(post)}
+                            </p>
                           </div>
-                          <p className="text-muted-foreground text-sm mt-2 line-clamp-2">
-                            {extractSnippet(post)}
-                          </p>
+                          <ExternalLink className="w-5 h-5 text-gray-400" />
                         </div>
-                        <ExternalLink className="w-5 h-5 text-gray-400" />
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </motion.div>
               ))}
             </div>
