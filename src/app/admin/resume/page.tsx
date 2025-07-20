@@ -1,3 +1,5 @@
+'use client'
+
 import { ExperienceManager } from "./_components/experience-manager";
 import { EducationManager } from "./_components/education-manager";
 import { SkillsManager } from "./_components/skills-manager";

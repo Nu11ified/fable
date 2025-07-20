@@ -5,16 +5,26 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { api } from "@/trpc/react";
-import { FileText, Download, Eye, Sparkles } from "lucide-react";
+import { FileText, Download, Eye, Sparkles, AlertCircle } from "lucide-react";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { SparklesText } from "@/components/magicui/sparkles-text";
 import { motion } from "motion/react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export function ResumeBox() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [pdfError, setPdfError] = useState<string>("");
   
   // Query to get the latest resume PDF from public API
-  const { data: resumeData } = api.public.resume.getLatestResume.useQuery();
+  const { data: resumeData, isLoading, error } = api.public.resume.getLatestResume.useQuery();
+  
+  // Query to get the PDF content for preview
+  const { data: pdfContent, isLoading: pdfLoading } = api.public.resume.getResumeContent.useQuery(
+    undefined,
+    {
+      enabled: isPreviewOpen, // Only fetch when preview is opened
+    }
+  );
   
   const latestResume = resumeData?.file;
 
@@ -23,10 +33,28 @@ export function ResumeBox() {
       const link = document.createElement("a");
       link.href = latestResume.url;
       link.download = `resume-${latestResume.name}`;
+      link.target = "_blank";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
+  };
+
+  const handlePreviewOpen = () => {
+    setPdfError("");
+    setIsPreviewOpen(true);
+  };
+
+  const handlePdfError = () => {
+    setPdfError("Unable to load PDF preview. Please try downloading the file instead.");
+  };
+
+  // Create data URL for PDF preview
+  const getPdfDataUrl = () => {
+    if (pdfContent?.success && pdfContent.content) {
+      return `data:application/pdf;base64,${pdfContent.content}`;
+    }
+    return null;
   };
 
   if (!latestResume) {
@@ -75,14 +103,19 @@ export function ResumeBox() {
               <div className="flex gap-2 justify-center">
                 <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
                   <DialogTrigger asChild>
-                    <Button variant="outline" size="sm" className="group">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="group"
+                      onClick={handlePreviewOpen}
+                    >
                       <Eye className="w-3 h-3 mr-1 group-hover:scale-110 transition-transform" />
                       Preview
                       <Sparkles className="w-3 h-3 ml-1 opacity-50 group-hover:opacity-100 transition-opacity" />
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-4xl h-[80vh]">
-                    <DialogHeader>
+                  <DialogContent className="max-w-7xl h-[95vh] grid grid-rows-[auto_1fr] gap-0 p-0">
+                    <DialogHeader className="p-6 pb-4">
                       <DialogTitle className="flex items-center gap-2">
                         <FileText className="w-5 h-5" />
                         Resume Preview
@@ -92,13 +125,53 @@ export function ResumeBox() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3 }}
-                      className="flex-1 rounded-lg overflow-hidden border bg-background"
+                      className="flex-1 rounded-b-lg overflow-hidden border-t bg-background min-h-0"
                     >
-                      <iframe
-                        src={`${latestResume.url}#toolbar=0&navpanes=0&scrollbar=0`}
-                        className="w-full h-full"
-                        title="Resume Preview"
-                      />
+                      {pdfLoading ? (
+                        <div className="flex items-center justify-center h-full">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                        </div>
+                      ) : pdfError ? (
+                        <div className="flex flex-col items-center justify-center h-full p-6">
+                          <AlertCircle className="w-12 h-12 text-muted-foreground mb-4" />
+                          <Alert className="max-w-md">
+                            <AlertDescription>{pdfError}</AlertDescription>
+                          </Alert>
+                          <Button 
+                            onClick={downloadResume}
+                            className="mt-4"
+                            variant="outline"
+                          >
+                            <Download className="w-4 h-4 mr-2" />
+                            Download Instead
+                          </Button>
+                        </div>
+                      ) : pdfContent?.success && getPdfDataUrl() ? (
+                        <iframe
+                          src={getPdfDataUrl()!}
+                          className="w-full h-full border-0"
+                          title="Resume Preview"
+                          onError={handlePdfError}
+                          onLoad={() => setPdfError("")}
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center h-full p-6">
+                          <AlertCircle className="w-12 h-12 text-muted-foreground mb-4" />
+                          <Alert className="max-w-md">
+                            <AlertDescription>
+                              Unable to load PDF preview. The file may not be available or accessible.
+                            </AlertDescription>
+                          </Alert>
+                          <Button 
+                            onClick={downloadResume}
+                            className="mt-4"
+                            variant="outline"
+                          >
+                            <Download className="w-4 h-4 mr-2" />
+                            Download Instead
+                          </Button>
+                        </div>
+                      )}
                     </motion.div>
                   </DialogContent>
                 </Dialog>

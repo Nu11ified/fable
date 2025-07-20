@@ -84,6 +84,70 @@ export const resumeRouter = createTRPCRouter({
     }
   }),
 
+  // Get PDF content for preview (proxy through our server to avoid CORS)
+  getResumeContent: publicProcedure.query(async () => {
+    try {
+      const username = env.GITHUB_USER_NAME;
+      const repoName = "fable-photo-storage";
+      
+      const response = await fetch(
+        `https://api.github.com/repos/${username}/${repoName}/contents/resume`,
+        {
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+            "User-Agent": "fable-portfolio-app",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const files = await response.json() as Array<{
+          name: string;
+          path: string;
+          sha: string;
+          size: number;
+          download_url: string;
+          type: string;
+        }>;
+        
+        const resumeFiles = files
+          .filter(file => file.type === "file" && /\.pdf$/i.test(file.name))
+          .sort((a, b) => {
+            const timestampAMatch = /^(\d+)-/.exec(a.name);
+            const timestampBMatch = /^(\d+)-/.exec(b.name);
+            const timestampA = timestampAMatch?.[1] ? parseInt(timestampAMatch[1]) : 0;
+            const timestampB = timestampBMatch?.[1] ? parseInt(timestampBMatch[1]) : 0;
+            return timestampB - timestampA;
+          });
+
+        if (resumeFiles.length > 0) {
+          const latestFile = resumeFiles[0];
+          
+          if (latestFile && latestFile.download_url) {
+            // Fetch the actual PDF content
+            const pdfResponse = await fetch(latestFile.download_url);
+            if (pdfResponse.ok) {
+              const pdfBuffer = await pdfResponse.arrayBuffer();
+              const base64Content = Buffer.from(pdfBuffer).toString('base64');
+              
+              return {
+                success: true,
+                content: base64Content,
+                filename: latestFile.name,
+                size: latestFile.size,
+              };
+            }
+          }
+        }
+      }
+      
+      return { success: false, content: null };
+    } catch (error) {
+      console.error("Error fetching resume content:", error);
+      return { success: false, content: null };
+    }
+  }),
+
   getTimeline: publicProcedure.query(async () => {
     // Get both experience and education and combine them into a timeline
     const [experiences, educations] = await Promise.all([
