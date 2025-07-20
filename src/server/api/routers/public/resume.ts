@@ -1,5 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
+import { env } from "@/env";
 
 export const resumeRouter = createTRPCRouter({
   getExperience: publicProcedure.query(async () => {
@@ -22,6 +23,65 @@ export const resumeRouter = createTRPCRouter({
 
   getPersonalInfo: publicProcedure.query(async () => {
     return await db.query.personalInfo.findFirst();
+  }),
+
+  // Get the latest resume PDF for public access
+  getLatestResume: publicProcedure.query(async () => {
+    try {
+      // For public access, we'll try to fetch from the public GitHub repo
+      // This assumes the repo is public and contains resume files
+      const username = env.GITHUB_USER_NAME;
+      const repoName = "fable-photo-storage";
+      
+      const response = await fetch(
+        `https://api.github.com/repos/${username}/${repoName}/contents/resume`,
+        {
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+            "User-Agent": "fable-portfolio-app",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const files = await response.json() as Array<{
+          name: string;
+          path: string;
+          sha: string;
+          size: number;
+          download_url: string;
+          type: string;
+        }>;
+        
+        // Filter to only PDF files and add metadata
+        const resumeFiles = files
+          .filter(file => file.type === "file" && /\.pdf$/i.test(file.name))
+          .map(file => {
+            const timestampMatch = /^(\d+)-/.exec(file.name);
+            const timestamp = timestampMatch?.[1] ? parseInt(timestampMatch[1]) : null;
+            
+            return {
+              name: file.name,
+              path: file.path,
+              sha: file.sha,
+              size: file.size,
+              url: `https://raw.githubusercontent.com/${username}/${repoName}/main/${file.path}`,
+              downloadUrl: file.download_url,
+              timestamp,
+              uploadDate: timestamp ? new Date(timestamp) : null,
+            };
+          })
+          .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0)); // Sort by newest first
+
+        return { success: true, file: resumeFiles[0] || null };
+      } else {
+        // Resume folder doesn't exist or repo is private
+        return { success: true, file: null };
+      }
+    } catch (error) {
+      console.error("Error fetching resume:", error);
+      return { success: false, file: null };
+    }
   }),
 
   getTimeline: publicProcedure.query(async () => {

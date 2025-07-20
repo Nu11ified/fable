@@ -448,6 +448,92 @@ export const githubStorageRouter = createTRPCRouter({
       }
     }),
 
+  // List resume files specifically
+  listResumeFiles: adminProcedure.query(async ({ }) => {
+    try {
+      const accessTokenResult = await auth.api.getAccessToken({
+        body: {
+          providerId: "github",
+        },
+        headers: await headers(),
+      });
+
+      if (!accessTokenResult.accessToken) {
+        throw new Error("No GitHub access token found. Please re-authenticate with GitHub.");
+      }
+
+      // Get the GitHub username
+      const userResponse = await fetch("https://api.github.com/user", {
+        headers: {
+          Authorization: `Bearer ${accessTokenResult.accessToken}`,
+          Accept: "application/vnd.github.v3+json",
+          "User-Agent": "fable-portfolio-app",
+        },
+      });
+
+      if (!userResponse.ok) {
+        throw new Error("Failed to get GitHub user info");
+      }
+
+      const githubUser = await userResponse.json() as GitHubUser;
+      const username = githubUser.login;
+
+      // List contents of the resume folder
+      const response = await fetch(
+        `https://api.github.com/repos/${username}/${REPO_NAME}/contents/resume`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessTokenResult.accessToken}`,
+            Accept: "application/vnd.github.v3+json",
+            "User-Agent": "fable-portfolio-app",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const files = await response.json() as Array<{
+          name: string;
+          path: string;
+          sha: string;
+          size: number;
+          download_url: string;
+          type: string;
+        }>;
+        
+        // Filter to only PDF files and add metadata
+        const resumeFiles = files
+          .filter(file => file.type === "file" && /\.pdf$/i.test(file.name))
+          .map(file => {
+            const timestampMatch = /^(\d+)-/.exec(file.name);
+            const timestamp = timestampMatch?.[1] ? parseInt(timestampMatch[1]) : null;
+            
+            return {
+              name: file.name,
+              path: file.path,
+              sha: file.sha,
+              size: file.size,
+              url: `https://raw.githubusercontent.com/${username}/${REPO_NAME}/main/${file.path}`,
+              downloadUrl: file.download_url,
+              timestamp,
+              uploadDate: timestamp ? new Date(timestamp) : null,
+            };
+          })
+          .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0)); // Sort by newest first
+
+        return { success: true, files: resumeFiles };
+      } else if (response.status === 404) {
+        // Resume folder doesn't exist yet
+        return { success: true, files: [] };
+      } else {
+        const error = await response.text();
+        throw new Error(`GitHub API error: ${response.status} - ${error}`);
+      }
+    } catch (error) {
+      console.error("Error listing resume files:", error);
+      throw new Error(`Failed to list resume files: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }),
+
   // Debug: Check token scopes
   checkTokenScopes: adminProcedure.query(async ({ }) => {
     try {
