@@ -21,6 +21,7 @@ import { SparklesText } from "@/components/magicui/sparkles-text";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { Meteors } from "@/components/magicui/meteors";
 import { AnimatedList } from "@/components/magicui/animated-list";
+import { ResumeBox } from "@/components/ui/resume-box";
 import dynamic from "next/dynamic";
 import TracingBeam from "@/components/ui/tracing-beam";
 import { env } from "@/env";
@@ -209,6 +210,9 @@ export function HomeContent() {
                   </div>
                 </CardContent>
             </MagicCard>
+            
+            <ResumeBox />
+            
             <MagicCard className="bg-card border-border">
               <CardContent className="p-6">
                 <div className="text-center">
